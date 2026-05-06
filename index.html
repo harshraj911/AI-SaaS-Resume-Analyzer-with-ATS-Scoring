@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RÉSUMÉ.AI — ATS Intelligence Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- PDF.js for PDF parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Mammoth.js for DOCX parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+
+<!-- NOISE OVERLAY -->
+<div class="noise"></div>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header-left">
+    <div class="logo-mark">R</div>
+    <div class="logo-text">
+      <span class="logo-main">RÉSUMÉ<span class="logo-dot">.</span>AI</span>
+      <span class="logo-sub">ATS Intelligence Platform</span>
+    </div>
+  </div>
+  <nav class="header-nav">
+    <span class="nav-item active">Analyzer</span>
+    <span class="nav-item">History</span>
+    <span class="nav-item">Templates</span>
+  </nav>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <span class="status-text">AI Online</span>
+  </div>
+</header>
+
+<!-- HERO BAND -->
+<div class="hero-band" id="heroBand">
+  <div class="hero-marquee">
+    <span>ATS SCORE ANALYSIS</span>
+    <span class="sep">✦</span>
+    <span>KEYWORD INTELLIGENCE</span>
+    <span class="sep">✦</span>
+    <span>RESUME OPTIMIZATION</span>
+    <span class="sep">✦</span>
+    <span>CAREER INTELLIGENCE</span>
+    <span class="sep">✦</span>
+    <span>ATS SCORE ANALYSIS</span>
+    <span class="sep">✦</span>
+    <span>KEYWORD INTELLIGENCE</span>
+    <span class="sep">✦</span>
+    <span>RESUME OPTIMIZATION</span>
+    <span class="sep">✦</span>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<main class="app-main">
+
+  <!-- === INPUT PHASE === -->
+  <section class="phase" id="phaseInput">
+    <div class="phase-header">
+      <div class="phase-number">01</div>
+      <div class="phase-info">
+        <h1 class="phase-title">Input <em>Documents</em></h1>
+        <p class="phase-desc">Paste your resume and target job description to begin your ATS analysis</p>
+      </div>
+      <div class="phase-stat">
+        <div class="stat-num" id="totalChars">0</div>
+        <div class="stat-label">characters</div>
+      </div>
+    </div>
+
+    <div class="input-arena">
+      <!-- Resume Pane -->
+      <div class="pane" id="resumePane">
+        <div class="pane-header">
+          <div class="pane-tag">DOCUMENT A</div>
+          <div class="pane-title">Your Resume</div>
+          <div class="pane-counter" id="resumeCounter">0 chars</div>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="resumeUploadZone">
+          <div class="uz-icon">📄</div>
+          <div class="uz-title">Drop your resume here</div>
+          <div class="uz-formats">PDF · DOCX · TXT supported</div>
+          <label class="uz-btn" for="resumeFileInput">Choose File</label>
+          <input type="file" id="resumeFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.txt">
+          <div class="uz-file-info" id="resumeFileInfo"></div>
+        </div>
+
+        <!-- Divider -->
+        <div class="pane-or-divider"><span>or paste text below</span></div>
+
+        <div class="pane-body">
+          <textarea id="resumeInput" class="pane-textarea" placeholder="Paste your complete resume here — work history, skills, education, certifications, achievements..."></textarea>
+        </div>
+        <div class="pane-footer">
+          <div class="pane-indicator" id="resumeIndicator">
+            <span class="ind-dot empty"></span>
+            <span class="ind-text">Awaiting input</span>
+          </div>
+          <button class="pane-clear-btn" id="resumeClearBtn" style="display:none">✕ Clear</button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="pane-divider">
+        <div class="divider-line"></div>
+        <div class="divider-vs">VS</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Job Description Pane -->
+      <div class="pane" id="jobPane">
+        <div class="pane-header">
+          <div class="pane-tag">DOCUMENT B</div>
+          <div class="pane-title">Job Description</div>
+          <div class="pane-counter" id="jobCounter">0 chars</div>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="jobUploadZone">
+          <div class="uz-icon">💼</div>
+          <div class="uz-title">Drop job description here</div>
+          <div class="uz-formats">PDF · DOCX · TXT supported</div>
+          <label class="uz-btn" for="jobFileInput">Choose File</label>
+          <input type="file" id="jobFileInput" class="file-input-hidden" accept=".pdf,.doc,.docx,.txt">
+          <div class="uz-file-info" id="jobFileInfo"></div>
+        </div>
+
+        <!-- Divider -->
+        <div class="pane-or-divider"><span>or paste text below</span></div>
+
+        <div class="pane-body">
+          <textarea id="jobInput" class="pane-textarea" placeholder="Paste the complete job posting — requirements, qualifications, responsibilities, preferred skills..."></textarea>
+        </div>
+        <div class="pane-footer">
+          <div class="pane-indicator" id="jobIndicator">
+            <span class="ind-dot empty"></span>
+            <span class="ind-text">Awaiting input</span>
+          </div>
+          <button class="pane-clear-btn" id="jobClearBtn" style="display:none">✕ Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="analyze-launch">
+      <button class="launch-btn" id="analyzeBtn">
+        <span class="launch-icon">✦</span>
+        <span class="launch-text">ANALYZE RESUME</span>
+        <span class="launch-arrow">→</span>
+      </button>
+      <div class="launch-note">Powered by Groq · llama-3.3-70b-versatile · Results in ~5 seconds</div>
+    </div>
+  </section>
+
+  <!-- === LOADING PHASE === -->
+  <section class="phase hidden" id="phaseLoading">
+    <div class="loading-theater">
+      <div class="loading-orb">
+        <div class="orb-ring r1"></div>
+        <div class="orb-ring r2"></div>
+        <div class="orb-ring r3"></div>
+        <div class="orb-core">AI</div>
+      </div>
+      <div class="loading-copy">
+        <div class="loading-headline">Analyzing<br><em>your future</em></div>
+        <div class="loading-steps" id="loadingSteps">
+          <div class="lstep" id="ls1"><span class="lstep-icon">○</span> Parsing document structure</div>
+          <div class="lstep" id="ls2"><span class="lstep-icon">○</span> Extracting keywords &amp; skills</div>
+          <div class="lstep" id="ls3"><span class="lstep-icon">○</span> Calculating ATS compatibility</div>
+          <div class="lstep" id="ls4"><span class="lstep-icon">○</span> Generating recommendations</div>
+          <div class="lstep" id="ls5"><span class="lstep-icon">○</span> Compiling final report</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- === RESULTS PHASE === -->
+  <section class="phase hidden" id="phaseResults">
+
+    <!-- RESULTS HERO -->
+    <div class="results-hero">
+      <div class="results-hero-left">
+        <div class="rh-eyebrow">ANALYSIS COMPLETE</div>
+        <div class="rh-score-display">
+          <div class="rh-score-num" id="displayScore">0</div>
+          <div class="rh-score-meta">
+            <div class="rh-grade" id="displayGrade">—</div>
+            <div class="rh-grade-label" id="displayGradeLabel">—</div>
+          </div>
+        </div>
+        <div class="rh-verdict" id="displayVerdict">—</div>
+      </div>
+      <div class="results-hero-right">
+        <div class="rh-radar" id="radarChart"></div>
+      </div>
+      <div class="results-hero-actions">
+        <button class="action-btn primary" id="newAnalysisBtn">New Analysis</button>
+        <button class="action-btn ghost" id="exportBtn">Export PDF</button>
+      </div>
+    </div>
+
+    <!-- SUB SCORE BAR -->
+    <div class="subscore-bar-row" id="subscoreRow"></div>
+
+    <!-- CONTENT GRID -->
+    <div class="content-grid">
+
+      <!-- LEFT: KEYWORD MAP -->
+      <div class="content-card card-keywords">
+        <div class="card-header">
+          <div class="card-tag">KEYWORDS</div>
+          <h2 class="card-title">Keyword <em>Intelligence</em></h2>
+          <div class="card-count" id="kwSummary">—</div>
+        </div>
+        <div class="keyword-sections" id="keywordSections"></div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="content-right">
+
+        <!-- STRENGTHS -->
+        <div class="content-card card-strengths">
+          <div class="card-header">
+            <div class="card-tag card-tag-green">STRENGTHS</div>
+            <h2 class="card-title">What's <em>Working</em></h2>
+          </div>
+          <div class="strength-list" id="strengthList"></div>
+        </div>
+
+        <!-- GAPS -->
+        <div class="content-card card-gaps">
+          <div class="card-header">
+            <div class="card-tag card-tag-red">GAPS</div>
+            <h2 class="card-title">Critical <em>Gaps</em></h2>
+          </div>
+          <div class="gap-list" id="gapList"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- IMPROVEMENTS FULL ROW -->
+    <div class="content-card card-improvements" style="margin-top:24px">
+      <div class="card-header">
+        <div class="card-tag card-tag-gold">ACTION PLAN</div>
+        <h2 class="card-title">Improvement <em>Roadmap</em></h2>
+        <div class="card-sub" id="improvCount">—</div>
+      </div>
+      <div class="improvements-grid" id="improvGrid"></div>
+    </div>
+
+    <!-- SUMMARY BANNER -->
+    <div class="summary-banner" id="summaryBanner"></div>
+
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <div class="footer-left">RÉSUMÉ.AI © 2025</div>
+  <div class="footer-center">Powered by Groq AI</div>
+  <div class="footer-right">ATS Intelligence Platform</div>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
